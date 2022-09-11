@@ -1,0 +1,5 @@
+data:
+  source_url: "https://raw.githubusercontent.com/udacity/nd0821-c3-starter-code/master/starter/data/census.csv"
+  local_path: "src.census_project.data"
+  raw: "census.csv"
+  transformed: "transformed.csv"

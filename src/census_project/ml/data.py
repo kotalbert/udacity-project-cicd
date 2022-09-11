@@ -1,6 +1,8 @@
 import numpy as np
 from sklearn.preprocessing import LabelBinarizer, OneHotEncoder
 
+# todo: lint file
+# todo: change docstring format
 
 def process_data(
     X, categorical_features=[], label=None, training=True, encoder=None, lb=None

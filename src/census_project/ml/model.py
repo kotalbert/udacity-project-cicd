@@ -1,6 +1,7 @@
 from sklearn.metrics import fbeta_score, precision_score, recall_score
 
-
+# todo: lint file
+# todo: change docstring format
 # Optional: implement hyperparameter tuning.
 def train_model(X_train, y_train):
     """

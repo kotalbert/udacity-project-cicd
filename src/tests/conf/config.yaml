@@ -1,0 +1,4 @@
+data:
+  local_path: "src.census_project.data"
+  raw: "census.csv"
+  transformed: "transformed.csv"

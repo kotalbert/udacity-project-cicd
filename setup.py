@@ -1,8 +1,4 @@
-import setuptools
+from setuptools import setup
 
-setuptools.setup(
-    name="starter",
-    version="0.0.0",
-    description="Starter code.",
-    author="Student",
-)
+if __name__ == '__main__':
+    setup()
