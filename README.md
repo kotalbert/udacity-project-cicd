@@ -26,7 +26,6 @@ $ tree -P "*.py" -I "__*|dist|*egg-info" -L 3
     │   ├── conf
     │   ├── data
     │   ├── etl.py
-    │   ├── ml
     │   ├── model
     │   └── train_model.py
     └── tests
@@ -41,7 +40,7 @@ Artifacts are not committed to the git repository; instead, they are stored exte
 
 The project uses [hydra framework][2] to manage the application's configuration.
 
-The `src/`census_project contains the `ml` module for training and validating the inference model, built with the [scikit-learn machine learning library][3].
+
 
 <!--  todo: make sure tests are described-->
 The `src/tests` include test suites for the project. Tests are divided into unit, component, and integration test suites.
@@ -54,13 +53,18 @@ The `src/tests` include test suites for the project. Tests are divided into unit
 
 ## ETL Process
 
-The ETL process module
+The ETL process module implements getting the data from the source and "cleaning" them to be used as input for inference model training.
+The process consists of the following stages:
 
 - Get the raw data,
-- Store the "raw" data in a remote data repository,
-- Retrieve "raw" data from a remote data repository,
-- Process "raw" data to prepare it for model building as "clean" data,
-- Store the "clean" data in the data repository
+- Store the raw data in a remote data repository,
+- Retrieve raw data from a remote data repository,
+- Process raw data to prepare it for model building as clean data,
+- Store the clean data in the data repository
+
+The raw data is read from the GitHub repository to a local filesystem. Before any transformation is applied, data is pushed to DVC remote repository for storing and versioning.
+
+Further operations will retrieve data artifacts from the DVC repository rather than relying on files in local filesystem. This will ensure that ETL stages are loosely coupled and can be ran independently.
 
 ## Model Training and Validation
 
@@ -79,3 +83,5 @@ The ETL process module
 ## REST API
 
 ## CI/CD
+
+GitHub Action was configured to run `pylint` linter on each commit to the repository to ensure uniform style and code quality.
