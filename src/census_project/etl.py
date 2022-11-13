@@ -17,8 +17,8 @@ class DataFileKeys(Enum):
     It is to make sure, that wrong config key is not used.
     """
 
-    raw = 'raw'
-    transformed = 'transformed'
+    RAW = 'raw'
+    TRANSFORMED = 'transformed'
 
 
 def get_config() -> DictConfig:
@@ -47,13 +47,13 @@ def extract() -> None:
     """Pull the raw data from Internet."""
 
     cfg = get_config()['data']
-    r = requests.get(cfg['source_url'])
+    response = requests.get(cfg['source_url'], timeout=cfg['timeout'])
 
-    if not r.ok:
-        r.raise_for_status()
+    if not response.ok:
+        response.raise_for_status()
 
-    with open(get_data_file_path(DataFileKeys.raw.value), 'wb') as f:
-        f.write(r.content)
+    with open(get_data_file_path(DataFileKeys.RAW.value), 'wb') as filestream:
+        filestream.write(response.content)
 
 
 def transform() -> None:
@@ -65,19 +65,22 @@ def transform() -> None:
 
     """
 
-    with open(get_data_file_path(DataFileKeys.raw.value), 'r') as f:
-        text = f.read().replace(' ', '')
+    with open(get_data_file_path(DataFileKeys.RAW.value), 'r', encoding='utf-8') as filestream:
+        text = filestream.read().replace(' ', '')
 
-    with open(get_data_file_path(DataFileKeys.transformed.value), 'w') as f:
-        f.write(text)
+    with open(get_data_file_path(DataFileKeys.TRANSFORMED.value), 'w', encoding='utf-8')\
+            as filestream:
+        filestream.write(text)
 
 
 def load():
     """
     Put transformed data to dvc repo.
+
     Need to call subprocess, as dvc api is supporting only read operations.
+    :raises:  CalledProcessError, when subprocess terminates with non 0 code
     """
 
     subprocess.run(['dvc', 'add',
-                    get_data_file_path(DataFileKeys.transformed.value)])
-    subprocess.run(['dvc', 'push'])
+                    get_data_file_path(DataFileKeys.TRANSFORMED.value)], check=True)
+    subprocess.run(['dvc', 'push'], check=True)

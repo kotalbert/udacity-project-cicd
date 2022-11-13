@@ -11,6 +11,9 @@ from pandas import DataFrame
 
 from src.census_project.etl import extract, get_data_file_path, transform, load
 
+# disable false-positive linting errors when pytest fixture is used in test
+# pylint: disable=redefined-outer-name
+
 
 @pytest.fixture
 def data_path():
@@ -53,7 +56,9 @@ def test_transform(data_path):
 
 
 @pytest.fixture
-def transformed_data_df(data_path):
+def transformed_data_df():
+    """Fixture to get clean/transformed data."""
+
     extract()
     transform()
 
