@@ -68,7 +68,7 @@ def transform() -> None:
     with open(get_data_file_path(DataFileKeys.RAW.value), 'r', encoding='utf-8') as filestream:
         text = filestream.read().replace(' ', '')
 
-    with open(get_data_file_path(DataFileKeys.TRANSFORMED.value), 'w', encoding='utf-8')\
+    with open(get_data_file_path(DataFileKeys.TRANSFORMED.value), 'w', encoding='utf-8') \
             as filestream:
         filestream.write(text)
 

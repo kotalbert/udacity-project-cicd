@@ -27,7 +27,7 @@ $ tree -P "*.py" -I "__*|dist|*egg-info" -L 3
     │   ├── data
     │   ├── etl.py
     │   ├── model
-    │   └── train_model.py
+    │   └── training.py
     └── tests
         ├── component
         ├── conf

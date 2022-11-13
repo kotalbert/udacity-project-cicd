@@ -1,6 +1,8 @@
 """
 Unit tests test functionalities in isolation.
 """
+# disable false-positive linting errors when pytest fixture is used in test
+# pylint: disable=redefined-outer-name
 
 from pathlib import Path
 
@@ -9,10 +11,7 @@ import pkg_resources
 import pytest
 from pandas import DataFrame
 
-from src.census_project.etl import extract, get_data_file_path, transform, load
-
-# disable false-positive linting errors when pytest fixture is used in test
-# pylint: disable=redefined-outer-name
+from src.census_project.modules.etl import get_data_file_path, extract, transform, load
 
 
 @pytest.fixture
