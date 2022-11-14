@@ -5,8 +5,8 @@ import pandas as pd
 import pytest
 from pandas import DataFrame
 
-from src.census_project.modules.etl import get_data_file_path, extract, transform, load
-from src.census_project.modules.utils import DataFileKeys
+from src.census_project.modules.etl import extract, transform, load
+from src.census_project.modules.utils import DataFileKeys, get_data_file_path
 
 
 def test_get_file_path():

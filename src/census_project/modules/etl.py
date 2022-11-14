@@ -3,34 +3,16 @@ ETL getting data for analysis
 """
 
 import subprocess
-from pathlib import Path
 
-import pkg_resources
 import requests
 
-from src.census_project.modules.utils import DataFileKeys, get_config
-
-
-# todo: move to utils module
-def get_data_file_path(file_key: str) -> Path:
-    """
-    Get absolute path to data file, based on data config keys.
-
-    :param file_key: File key to be found in config. Must be one of values of
-    DataFileKeys enum, otherwise will throw key error.
-    """
-
-    cfg = get_config()['data']
-    # todo: refactor to use importlib
-    filename = pkg_resources.resource_filename(cfg['local_path'],
-                                               cfg[file_key])
-    return Path(filename)
+from src.census_project.modules.utils import DataFileKeys, compose_config, get_data_file_path
 
 
 def extract() -> None:
     """Pull the raw data from Internet."""
 
-    cfg = get_config()['data']
+    cfg = compose_config()['data']
     response = requests.get(cfg['source_url'], timeout=cfg['timeout'])
 
     if not response.ok:
