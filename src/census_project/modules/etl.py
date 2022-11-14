@@ -3,31 +3,15 @@ ETL getting data for analysis
 """
 
 import subprocess
-from enum import Enum
 from pathlib import Path
 
 import pkg_resources
 import requests
-from hydra import initialize, compose
-from omegaconf import DictConfig
+
+from src.census_project.modules.utils import DataFileKeys, get_config
 
 
-class DataFileKeys(Enum):
-    """Enum for Data file name keys, to read from config.
-    It is to make sure, that wrong config key is not used.
-    """
-
-    RAW = 'raw'
-    TRANSFORMED = 'transformed'
-
-
-def get_config() -> DictConfig:
-    """Helper to get hydra config dictionary."""
-
-    with initialize(config_path='conf', job_name='etl'):
-        return compose('config')
-
-
+# todo: move to utils module
 def get_data_file_path(file_key: str) -> Path:
     """
     Get absolute path to data file, based on data config keys.
@@ -37,7 +21,7 @@ def get_data_file_path(file_key: str) -> Path:
     """
 
     cfg = get_config()['data']
-
+    # todo: refactor to use importlib
     filename = pkg_resources.resource_filename(cfg['local_path'],
                                                cfg[file_key])
     return Path(filename)

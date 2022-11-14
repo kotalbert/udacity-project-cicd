@@ -4,28 +4,18 @@ Unit tests test functionalities in isolation.
 # disable false-positive linting errors when pytest fixture is used in test
 # pylint: disable=redefined-outer-name
 
-from pathlib import Path
-
 import pandas as pd
-import pkg_resources
 import pytest
 from pandas import DataFrame
 
 from src.census_project.modules.etl import get_data_file_path, extract, transform, load
-
-
-@pytest.fixture
-def data_path():
-    """Path to data directory."""
-
-    filename = pkg_resources.resource_filename('src.census_project', 'data')
-    return Path(filename)
+from src.census_project.modules.utils import DataFileKeys
 
 
 def test_get_file_path():
     """Getting path by config key should return correct file name."""
 
-    actual = get_data_file_path('raw').name
+    actual = get_data_file_path(DataFileKeys.RAW.value).name
     expected = 'census.csv'
 
     assert expected == actual
