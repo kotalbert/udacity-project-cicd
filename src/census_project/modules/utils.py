@@ -9,7 +9,8 @@ from hydra import initialize, compose
 from importlib_resources import files
 from omegaconf import DictConfig
 
-from src.census_project.artefacts import data
+from src.census_project import artifacts
+from src.census_project.artifacts import data
 
 # fixme: can this be interpolated?
 CONFIG_DIR_NAME = 'conf'
@@ -58,6 +59,19 @@ def get_config(key: Optional[str] = None) -> DictConfig:
     return config[key]
 
 
+def get_data_artifacts_path(filename: str) -> Path:
+    """
+    Get absolute path to data file, in `artifacts` directory.
+
+    :param filename: File key to be found in config. Must be one of values of
+    DataFileKeys enum, otherwise will throw key error.
+    """
+
+    data_artefacts_module_path = files(artifacts.data)
+    artifact_path = Path(data_artefacts_module_path, filename)
+    return artifact_path
+
+
 def pull_from_dvc(artifact_name: str, path: Path) -> None:
     """
     Pull data from DVC remote repository and it on local filesystem.
@@ -65,18 +79,3 @@ def pull_from_dvc(artifact_name: str, path: Path) -> None:
     :param path: Path object where data is to be saved on filesystem.
     """
     pass
-
-
-def get_data_file_path(file_key: str) -> Path:
-    """
-    Get absolute path to data file, based on data config keys.
-
-    :param file_key: File key to be found in config. Must be one of values of
-    DataFileKeys enum, otherwise will throw key error.
-    """
-
-    cfg = compose_config()['data']
-    # todo: refactor to use importlib
-    filename = pkg_resources.resource_filename(cfg['local_path'],
-                                               cfg[file_key])
-    return Path(filename)

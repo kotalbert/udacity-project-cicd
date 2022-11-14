@@ -6,7 +6,7 @@ import subprocess
 
 import requests
 
-from src.census_project.modules.utils import DataFileKeys, compose_config, get_data_file_path
+from src.census_project.modules.utils import DataFileKeys, compose_config, get_data_artifacts_path
 
 
 def extract() -> None:
@@ -18,7 +18,7 @@ def extract() -> None:
     if not response.ok:
         response.raise_for_status()
 
-    with open(get_data_file_path(DataFileKeys.RAW.value), 'wb') as filestream:
+    with open(get_data_artifacts_path(DataFileKeys.RAW.value), 'wb') as filestream:
         filestream.write(response.content)
 
 
@@ -31,10 +31,10 @@ def transform() -> None:
 
     """
 
-    with open(get_data_file_path(DataFileKeys.RAW.value), 'r', encoding='utf-8') as filestream:
+    with open(get_data_artifacts_path(DataFileKeys.RAW.value), 'r', encoding='utf-8') as filestream:
         text = filestream.read().replace(' ', '')
 
-    with open(get_data_file_path(DataFileKeys.TRANSFORMED.value), 'w', encoding='utf-8') \
+    with open(get_data_artifacts_path(DataFileKeys.TRANSFORMED.value), 'w', encoding='utf-8') \
             as filestream:
         filestream.write(text)
 
@@ -48,5 +48,5 @@ def load():
     """
 
     subprocess.run(['dvc', 'add',
-                    get_data_file_path(DataFileKeys.TRANSFORMED.value)], check=True)
+                    get_data_artifacts_path(DataFileKeys.TRANSFORMED.value)], check=True)
     subprocess.run(['dvc', 'push'], check=True)

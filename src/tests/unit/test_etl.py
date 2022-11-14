@@ -6,13 +6,13 @@ import pytest
 from pandas import DataFrame
 
 from src.census_project.modules.etl import extract, transform, load
-from src.census_project.modules.utils import DataFileKeys, get_data_file_path
+from src.census_project.modules.utils import DataFileKeys, get_data_artifacts_path
 
 
 def test_get_file_path():
     """Getting path by config key should return correct file name."""
 
-    actual = get_data_file_path(DataFileKeys.RAW.value).name
+    actual = get_data_artifacts_path(DataFileKeys.RAW.value).name
     expected = 'census.csv'
 
     assert expected == actual
@@ -48,7 +48,7 @@ def transformed_data_df():
     extract()
     transform()
 
-    return pd.read_csv(get_data_file_path('transformed'))
+    return pd.read_csv(get_data_artifacts_path('transformed'))
 
 
 def test_transform_df_shape(transformed_data_df):
