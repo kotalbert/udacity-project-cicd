@@ -1,4 +1,5 @@
 """Utilities module"""
+import os.path
 from enum import Enum
 from pathlib import Path
 
@@ -8,8 +9,11 @@ from omegaconf import DictConfig
 
 from src.census_project.artefacts import data
 
+# fixme: can this be interpolated?
+CONFIG_DIR_NAME = 'conf'
 
-def get_data_files_path():
+
+def get_data_files_path() -> Path:
     """Get absolute path to data files directory."""
 
     filename = files(data)
@@ -35,9 +39,14 @@ class DataFileKeys(Enum):
 
 
 def get_config() -> DictConfig:
-    """Helper to get hydra config dictionary."""
+    """
+    Helper to get hydra config dictionary.
 
-    with initialize(config_path='conf', job_name='etl'):
+    Assumes that config module is sources root.
+    """
+
+    config_pth = Path('..', CONFIG_DIR_NAME)
+    with initialize(config_path=config_pth, version_base=None, job_name='etl'):
         return compose('config')
 
 

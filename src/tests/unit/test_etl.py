@@ -1,9 +1,6 @@
 """
-Unit tests test functionalities in isolation.
+Unit tests for etl module
 """
-# disable false-positive linting errors when pytest fixture is used in test
-# pylint: disable=redefined-outer-name
-
 import pandas as pd
 import pytest
 from pandas import DataFrame
